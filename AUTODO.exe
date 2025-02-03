@@ -1,0 +1,94 @@
+import pyautogui
+import time
+import numpy as np
+
+# Configuration
+CRAFT_BUTTON_IMAGE = "craft_button.png"  # Image of the craft button
+DISCARD_BUTTON_IMAGE = "discard_button.png"  # Image of the discard button
+PET_STATS_AREA = (100, 200, 300, 400)  # Region of the screen where pet stats appear
+DESIRED_PET_TAL = 2400  # Desired pet Talent threshold
+DESIRED_CRAFT_STA = 85  # Desired Stamina threshold for crafted items
+
+# Delay between actions to avoid overwhelming the system
+ACTION_DELAY = 1
+
+def find_and_click(image_path, confidence=0.8):
+    """
+    Find an image on the screen and click it.
+    """
+    location = pyautogui.locateOnScreen(image_path, confidence=confidence)
+    if location:
+        pyautogui.click(location)
+        return True
+    return False
+
+def auto_craft():
+    """
+    Automate the crafting process.
+    """
+    print("Starting auto-crafting...")
+    while True:
+        # Find and click the craft button
+        if find_and_click(CRAFT_BUTTON_IMAGE):
+            time.sleep(ACTION_DELAY)  # Wait for crafting to complete
+
+            # Simulate checking item Stamina (replace with actual logic)
+            item_sta = check_item_stamina()
+            print(f"Detected item STA: {item_sta}")
+
+            if item_sta < DESIRED_CRAFT_STA:  # Discard low STA items
+                print("Low STA item detected. Discarding...")
+                find_and_click(DISCARD_BUTTON_IMAGE)
+            else:
+                print("High STA item detected. Keeping...")
+        else:
+            print("Craft button not found. Stopping auto-crafting.")
+            break
+
+def check_item_stamina():
+    """
+    Simulate checking the Stamina of a crafted item.
+    Replace this with actual image recognition logic.
+    """
+    # Example: Randomly generate a STA value between 50 and 100
+    return np.random.randint(50, 101)
+
+def auto_pet_management():
+    """
+    Automate pet management (e.g., resetting pets to baby form).
+    """
+    print("Starting pet management...")
+    while True:
+        # Simulate checking pet Talent (replace with actual logic)
+        pet_tal = check_pet_talent()
+        print(f"Detected pet TAL: {pet_tal}")
+
+        if pet_tal < DESIRED_PET_TAL:
+            print("Pet TAL too low. Resetting pet...")
+            # Simulate clicking the reset button (replace with actual logic)
+            find_and_click("reset_pet_button.png")
+            time.sleep(ACTION_DELAY)
+        else:
+            print(f"Strong pet found with TAL {pet_tal}! Stopping pet management.")
+            break
+
+def check_pet_talent():
+    """
+    Simulate checking the Talent of a pet.
+    Replace this with actual image recognition or OCR logic.
+    """
+    # Example: Randomly generate a TAL value between 1000 and 3000
+    return np.random.randint(1000, 3001)
+
+def main():
+    print("Starting automation script...")
+    try:
+        while True:
+            auto_craft()
+            auto_pet_management()
+            time.sleep(10)  # Wait before repeating
+    except KeyboardInterrupt:
+        print("Script stopped by user.")
+
+if __name__ == "__main__":
+    main()
